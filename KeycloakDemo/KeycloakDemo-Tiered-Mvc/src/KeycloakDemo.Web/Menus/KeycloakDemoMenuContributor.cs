@@ -11,6 +11,7 @@ using Volo.Abp.SettingManagement.Web.Navigation;
 using Volo.Abp.TenantManagement.Web.Navigation;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.Users;
+using KeycloakDemo.Permissions;
 
 namespace KeycloakDemo.Web.Menus;
 
@@ -48,6 +49,18 @@ public class KeycloakDemoMenuContributor : IMenuContributor
                 "~/",
                 icon: "fas fa-home",
                 order: 0
+            )
+        );
+
+        context.Menu.Items.Insert(
+            1,
+            new ApplicationMenuItem(
+                KeycloakDemoMenus.Home,
+                "Test permissions",
+                "~/",
+                icon: "fas fa-home",
+                order: 2,
+                requiredPermissionName: KeycloakDemoPermissions.Test
             )
         );
 

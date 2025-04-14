@@ -1,3 +1,4 @@
+using IdentityModel;
 using IdentityModel.AspNetCore.AccessTokenManagement;
 using KeycloakDemo.Localization;
 using KeycloakDemo.MultiTenancy;
@@ -15,6 +16,7 @@ using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
 using System;
 using System.IO;
+using System.Security.Claims;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.OpenIdConnect;
 using Volo.Abp.AspNetCore.Mvc.Client;
@@ -34,6 +36,7 @@ using Volo.Abp.Http.Client.Web;
 using Volo.Abp.Identity.Web;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Security.Claims;
 using Volo.Abp.SettingManagement.Web;
 using Volo.Abp.Swashbuckle;
 using Volo.Abp.TenantManagement.Web;
@@ -72,6 +75,18 @@ public class KeycloakDemoWebModule : AbpModule
                 typeof(KeycloakDemoWebModule).Assembly
             );
         });
+
+        AbpClaimTypes.UserName = JwtClaimTypes.PreferredUserName;
+        AbpClaimTypes.Name = JwtClaimTypes.GivenName;
+        AbpClaimTypes.SurName = JwtClaimTypes.FamilyName;
+
+        //AbpClaimTypes.UserId = JwtClaimTypes.Subject;
+        AbpClaimTypes.UserId = ClaimTypes.NameIdentifier;
+
+        AbpClaimTypes.Role = JwtClaimTypes.Role;
+
+        //AbpClaimTypes.Email = JwtClaimTypes.Email;
+        AbpClaimTypes.Email = ClaimTypes.Email;
     }
 
     public override void ConfigureServices(ServiceConfigurationContext context)

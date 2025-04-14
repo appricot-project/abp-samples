@@ -10,7 +10,7 @@ public class KeycloakDemoPermissionDefinitionProvider : PermissionDefinitionProv
     {
         var myGroup = context.AddGroup(KeycloakDemoPermissions.GroupName);
         //Define your own permissions here. Example:
-        //myGroup.AddPermission(KeycloakDemoPermissions.MyPermission1, L("Permission:MyPermission1"));
+        myGroup.AddPermission(KeycloakDemoPermissions.Test, L("Permission:Test"));
     }
 
     private static LocalizableString L(string name)
