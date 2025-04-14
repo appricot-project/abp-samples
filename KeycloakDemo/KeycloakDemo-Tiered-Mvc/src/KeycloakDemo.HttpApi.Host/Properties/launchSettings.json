@@ -3,8 +3,8 @@
     "windowsAuthentication": false, 
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "https://localhost:44359",
-      "sslPort": 44359
+      "applicationUrl": "https://localhost:44360",
+      "sslPort": 44360
     }
   },
   "profiles": {
@@ -18,7 +18,7 @@
     "KeycloakDemo.HttpApi.Host": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "https://localhost:44359",
+      "applicationUrl": "https://localhost:44360",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

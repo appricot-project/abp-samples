@@ -5,9 +5,11 @@ using KeycloakDemo.MultiTenancy;
 using KeycloakDemo.Web.Identity;
 using KeycloakDemo.Web.Menus;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.OAuth.Claims;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -79,14 +81,9 @@ public class KeycloakDemoWebModule : AbpModule
         AbpClaimTypes.UserName = JwtClaimTypes.PreferredUserName;
         AbpClaimTypes.Name = JwtClaimTypes.GivenName;
         AbpClaimTypes.SurName = JwtClaimTypes.FamilyName;
-
-        //AbpClaimTypes.UserId = JwtClaimTypes.Subject;
-        AbpClaimTypes.UserId = ClaimTypes.NameIdentifier;
-
+        AbpClaimTypes.UserId = JwtClaimTypes.Subject;
         AbpClaimTypes.Role = JwtClaimTypes.Role;
-
-        //AbpClaimTypes.Email = JwtClaimTypes.Email;
-        AbpClaimTypes.Email = ClaimTypes.Email;
+        AbpClaimTypes.Email = JwtClaimTypes.Email;
     }
 
     public override void ConfigureServices(ServiceConfigurationContext context)
@@ -183,6 +180,31 @@ public class KeycloakDemoWebModule : AbpModule
                 {
                     Console.WriteLine(context);
                 };
+
+                //options.ClaimActions.Clear();
+
+                if (AbpClaimTypes.UserName != "preferred_username")
+                {
+                    options.ClaimActions.MapJsonKey(AbpClaimTypes.UserName, "preferred_username");
+                    options.ClaimActions.DeleteClaim("preferred_username");
+                    options.ClaimActions.RemoveDuplicate(AbpClaimTypes.UserName);
+                }
+
+                options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, JwtClaimTypes.Subject);
+
+                options.ClaimActions.MapJsonKey(AbpClaimTypes.UserId, JwtClaimTypes.Subject);
+                options.ClaimActions.RemoveDuplicate(AbpClaimTypes.UserId);
+
+                options.ClaimActions.MapJsonKey(AbpClaimTypes.Email, JwtClaimTypes.Email);
+                options.ClaimActions.DeleteClaim(JwtClaimTypes.Email);
+                options.ClaimActions.RemoveDuplicate(AbpClaimTypes.Email);
+
+                options.ClaimActions.MapJsonKey(AbpClaimTypes.Name, JwtClaimTypes.GivenName);
+                options.ClaimActions.MapJsonKey(AbpClaimTypes.SurName, JwtClaimTypes.FamilyName);
+
+                options.ClaimActions.MapJsonKey(AbpClaimTypes.Role, JwtClaimTypes.Role);
+                options.ClaimActions.DeleteClaim(JwtClaimTypes.Role);
+                options.ClaimActions.RemoveDuplicate(AbpClaimTypes.Role);
 
                 options.Events.OnTokenValidated = async (context) =>
                 {

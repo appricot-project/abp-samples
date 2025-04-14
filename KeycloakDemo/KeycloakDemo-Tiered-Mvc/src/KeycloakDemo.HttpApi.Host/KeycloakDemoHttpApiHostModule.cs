@@ -27,6 +27,10 @@ using Volo.Abp.Modularity;
 using Volo.Abp.Swashbuckle;
 using Volo.Abp.VirtualFileSystem;
 using Microsoft.AspNetCore.Authentication;
+using IdentityModel;
+using KeycloakDemo.Localization;
+using Volo.Abp.AspNetCore.Mvc.Localization;
+using Volo.Abp.Security.Claims;
 
 namespace KeycloakDemo;
 
@@ -187,7 +191,20 @@ public class KeycloakDemoHttpApiHostModule : AbpModule
             });
         });
     }
+    public override void PreConfigureServices(ServiceConfigurationContext context)
+    {
+        AbpClaimTypes.UserName = JwtClaimTypes.PreferredUserName;
+        AbpClaimTypes.Name = JwtClaimTypes.GivenName;
+        AbpClaimTypes.SurName = JwtClaimTypes.FamilyName;
 
+        AbpClaimTypes.UserId = JwtClaimTypes.Subject;
+        // AbpClaimTypes.UserId = ClaimTypes.NameIdentifier;
+
+        AbpClaimTypes.Role = JwtClaimTypes.Role;
+
+        AbpClaimTypes.Email = JwtClaimTypes.Email;
+        // AbpClaimTypes.Email = ClaimTypes.Email;
+    }
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
     {
         var app = context.GetApplicationBuilder();
